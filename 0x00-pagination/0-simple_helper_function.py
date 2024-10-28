@@ -8,6 +8,7 @@ to return in a list for those particular pagination parameters.
 
 
 def index_range(page: int, page_size: int) -> tuple:
+    '''This function calculates index range'''
     start_index = (page - 1) * page_size
     end_index = page * page_size
     return start_index, end_index
