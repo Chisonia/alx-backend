@@ -36,28 +36,24 @@ class Server:
             }
         return self.__indexed_dataset
 
-    def get_hyper_index(
-            self, index: int = None,
-            page_size: int = 10
-            ) -> Dict:
+    def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
         '''Get a hypermedia paginated
         dataset starting from a specific index.'''
-        assert isinstance(
-            index, int
-            ) and 0 <= index < len(self.__indexed_dataset)
+        index = index or 0
+        assert 0 <= index < len(self.__indexed_dataset), "Index out of range"
         assert isinstance(page_size, int) and page_size > 0
 
         data = []
         c_index = index
 
         while len(data) < page_size and c_index < len(self.__indexed_dataset):
-            if current_index in self.__indexed_dataset:
-                data.append(self.__indexed_dataset[current_index])
-            current_index += 1
+            if c_index in self.__indexed_dataset:
+                data.append(self.__indexed_dataset[c_index])
+            c_index += 1
 
         return {
             'index': index,
-            'next_index': current_index,
+            'next_index': c_index,
             'page_size': len(data),
             'data': data
         }
