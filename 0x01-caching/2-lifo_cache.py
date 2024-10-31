@@ -5,30 +5,28 @@ class LIFOCache(BaseCaching):
     def __init__(self):
         """ Initialize the LIFO cache """
         super().__init__()
-        self.keys_order = []
+        self.keys_order = []  # Track the order of keys for LIFO
 
     def put(self, key, item):
         """ Add item to cache with LIFO eviction policy """
         if key is None or item is None:
             return
 
-        # If key already exists, update its value
         if key in self.cache_data:
+            # Update existing item
             self.cache_data[key] = item
-            # Update the order list
-            self.keys_order.remove(key)
+            self.keys_order.remove(key)  # Remove key from current position
         else:
-            # Eviction if over capacity
             if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-                # Discard the last item added
-                last_key = self.keys_order.pop()  # Remove the last key
-                del self.cache_data[last_key]
-                print(f"DISCARD: {last_key}")
+                # Evict the last item added
+                discarded_key = self.keys_order.pop()  # Remove the last key
+                del self.cache_data[discarded_key]  # Remove from cache
+                print(f"DISCARD: {discarded_key}")
 
-            # Insert new item
+            # Add new item
             self.cache_data[key] = item
 
-        # Add the key to the order list
+        # Add or refresh key in the order list
         self.keys_order.append(key)
 
     def get(self, key):
