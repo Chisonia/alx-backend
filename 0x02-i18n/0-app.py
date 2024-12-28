@@ -7,7 +7,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    '''This function returns a render template'''
     return render_template("index.html")
 
 
