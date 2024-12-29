@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-'''Language config module'''
-from flask import Flask, render_template
+'''Best match language module'''
+from flask import Flask, render_template, request
 from flask_babel import Babel
 
 
@@ -15,6 +15,12 @@ app = Flask(__name__)
 app.config.from_object(Config)  # Use Config class for app configuration
 
 babel = Babel(app)  # Instantiate Babel object and bind it to the app
+
+
+@babel.localeselector
+def get_locale():
+    """Determine the best match for supported languages."""
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 @app.route("/")
